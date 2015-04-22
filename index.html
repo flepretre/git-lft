@@ -1,0 +1,396 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+	<meta charset="utf-8">
+
+	<title>reveal.js - The HTML Presentation Framework</title>
+
+	<meta name="description" content="A framework for easily creating beautiful presentations using HTML">
+	<meta name="author" content="Hakim El Hattab">
+
+	<meta name="apple-mobile-web-app-capable" content="yes"/>
+	<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"/>
+
+	<meta name="viewport"
+				content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+	<link rel="stylesheet" href="css/reveal.css">
+	<link rel="stylesheet" href="css/theme/black.css" id="theme">
+
+	<!-- Code syntax highlighting -->
+	<link rel="stylesheet" href="lib/css/zenburn.css">
+
+	<!-- Printing and PDF exports -->
+	<script>
+		var link = document.createElement('link');
+		link.rel = 'stylesheet';
+		link.type = 'text/css';
+		link.href = window.location.search.match(/print-pdf/gi) ? 'css/print/pdf.css' : 'css/print/paper.css';
+		document.getElementsByTagName('head')[0].appendChild(link);
+	</script>
+
+	<!--[if lt IE 9]>
+	<script src="lib/js/html5shiv.js"></script>
+	<![endif]-->
+</head>
+
+<body>
+
+<div class="reveal">
+
+	<!-- Any section element inside of this container is displayed as a slide -->
+	<div class="slides">
+		<section>
+			<h1>Git</h1>
+
+			<h3>tips, tricks & treats</h3>
+		</section>
+
+		<section>
+			<h2>Plan</h2>
+			<section>
+				<ul>
+					<li>Bases</li>
+					<li>Trucs et astuces</li>
+					<li>Outils</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<h2>Bases</h2>
+			<section>
+				<h3>Les commits</h3>
+			</section>
+			<section>
+				<p>Qu'est-ce qu'un commit ?</p>
+
+				<p class="fragment">Pas la base ...</p>
+			</section>
+			<section>
+				<h3>Le blob est l'élément de base</h3>
+			</section>
+			<section>
+				<img src="img/blob.png" style="border:0; background-color: inherit; box-shadow: none">
+			</section>
+			<section>
+				<p>Le risque de colision sur les sha1 est très faible</p>
+			</section>
+			<section>
+				<p>Du coup on peut admettre</p>
+				<ul>
+					<li class="fragment">à chaque contenu correspond un seul sha1</li>
+					<li class="fragment">à chaque sha1 correspond un seul contenu</li>
+				</ul>
+			</section>
+			<section>
+				<h3>Puis vient le tree</h3>
+			</section>
+			<section>
+				<p>Le tree représente un niveau d'arborescence</p>
+			</section>
+			<section>
+				<img src="img/tree.png" style="border:0; background-color: inherit; box-shadow: none">
+			</section>
+			<section>
+				<h3>Enfin vient le commit</h3>
+			</section>
+			<section>
+				<p>Le commit représente une arborescence à un instant T</p>
+			</section>
+			<section>
+				<img src="img/commit.png" style="border:0; background-color: inherit; box-shadow: none">
+			</section>
+			<section>
+				<img src="img/successive-commits.png" style="border:0; background-color: inherit; box-shadow: none">
+			</section>
+			<section data-background-color="#b5533c" data-background-transition="zoom">
+				<h1>Un commit est immuable !!!</h1>
+			</section>
+			<section data-background-color="#b5533c">
+				<ul>
+					<li>
+						il est impossible de modifier un commit
+						<pre><code>git commit --amend</code></pre>
+					</li>
+					<li>
+						il est impossible de déplacer un commit
+						<pre><code>git rebase</code></pre>
+						<pre><code>git cherry-pick</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section data-background-transition="zoom">
+				<h3>Récapitulons</h3>
+			</section>
+			<section>
+				<img src="img/two%20commits.png" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section><h2>HEAD</h2></section>
+			<section><p>Simple pointeur pour dire où vous êtes</p></section>
+			<section>
+				<h2>Les branches</h2>
+			</section>
+			<section>
+				<ul>
+					<li>Les branches sont de simples pointeurs de commits</li>
+					<li class="fragment">Il y a deux types de branches
+						<ul>
+							<li class="fragment">Les branches "locales" (vos branches)</li>
+							<li class="fragment">Les branches "distantes" (image en local des branches des repos distants)</li>
+						</ul>
+					</li>
+					<li class="fragment">La branche courante est celle sur laquelle point HEAD</li>
+					<li class="fragment">Lors du commit la branche courante progresse</li>
+				</ul>
+			</section>
+			<section>
+				<h2>Les tags</h2>
+			</section>
+			<section>
+				<ul>
+					<li>Soit un simple pointeur (comme un branche)</li>
+					<li class="fragment">Soit signé ou annoté (un peu plus comme un commit)</li>
+					<li class="fragment">Les tags ne peuvent être déplacés</li>
+				</ul>
+			</section>
+			<section>
+				<p>Surtout n'oubliez pas</p>
+				<p class="fragment">Les branches et les tags</p>
+				<p class="fragment">C'est gratuit !</p>
+			</section>
+		</section>
+
+		<section>
+			<h2>Trucs et astuces</h2>
+			<section>
+				<h2>Rebase</h2>
+				<p>Dans tous les sens</p>
+			</section>
+			<section>
+				<p>Rebase permet de "déplacer" une succession de commits</p>
+			</section>
+			<section>
+				<p>Le rebase classique</p>
+				<pre class="fragment"><code>git rebase master</code></pre>
+			</section>
+			<section>
+				<p>Le rebase <i>onto</i></p>
+				<pre class="fragment"><code>git rebase --onto master work~3 work</code></pre>
+			</section>
+			<section>
+				<img src="img/wtf.gif" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section>
+				<p>On recommence ...</p>
+				<pre class="fragment"><code>git rebase --onto A B C</code></pre>
+				<ul>
+					<li class="fragment">A : commit sur lequel on veut placer les autres</li>
+					<li class="fragment">B : commit parent du premier commit que l'on déplace</li>
+					<li class="fragment">C : dernier commit que l'on déplace
+						<ul>
+							<li class="fragment">S'il s'agit d'une branche, le pointeur de la branche est déplacé en même temps</li>
+						</ul>
+					</li>
+				</ul>
+			</section>
+			<section>
+				<p>Avant le rebase</p>
+				<img src="img/avant-rebase.png" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section>
+				<p>Après le rebase</p>
+				<img src="img/apres-rebase.png" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section>
+				<p>Le rebase <i>interactif</i></p>
+				<pre class="fragment"><code>git rebase -i master</code></pre>
+			</section>
+			<section>
+				<img src="img/rebase-i.png" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section><h2>fixup & squash</h2></section>
+			<section>
+				<div>
+					<p>Le fixup crée un commit de correction sans message</p>
+					<pre><code>git commit --squash=HEAD~</code></pre>
+					<p>Corrige le commit parent de HEAD</p>
+				</div>
+				<br/>
+				<div class="fragment">
+					<p>Le fixup crée un commit de correction sans message</p>
+					<pre><code>git commit --fixup=HEAD~</code></pre>
+					<p>Corrige le commit parent de HEAD</p>
+				</div>
+			</section>
+			<section>
+				<p>Pour appliquer un fixup ou squash 2 méthodes</p>
+				<ul>
+					<li class="fragment">a la main ...</li>
+					<li class="fragment">avec un rebase interactif
+						<pre style="width: 100%;"><code>git rebase -i HEAD~3 --autosquash</code></pre>
+					</li>
+				</ul>
+			</section>
+			<section>
+				<img src="img/fixup.png" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section>
+				<h2>git rerere</h2>
+			</section>
+			<section>
+				<p>Marre de vous retaper la résolution du même conflit ?</p>
+			</section>
+			<section>
+				<p>Git rerere est fait pour ça !</p>
+				<pre><code>git config --global rerere.enabled true</code></pre>
+			</section>
+			<section>
+				<p>Oui, mais après ?</p>
+			</section>
+			<section>
+				<pre><code>git merge origin/master
+# resolution de conflit
+git commit
+# rerere enregistre votre résolution
+
+...
+
+# plus tard
+git merge origin/master
+# rerere applique votre résolution aux conflits qu'il connait</code></pre>
+			</section>
+
+			<section><h2>Git en équipe</h2></section>
+			<section>Comme on l'a vu, on peut réécrire complètement l'historique git</section>
+			<section>Mais en équipe il vaut mieux éviter</section>
+			<section>
+				<p>Il est préférable de faire des squash ou fixup</p>
+				<br/>
+				<p class="fragment">Puis de réécrire l'historique juste avant le merge</p>
+			</section>
+
+			<section>
+				<h2>Les messages de commit</h2>
+			</section>
+			<section data-background-color="#b5533c" data-background-transition="zoom">
+				<h1>C'est important</h1>
+			</section>
+			<section>
+				<p>Pas pour aujourd'hui ...</p>
+				<br/>
+				<p class="fragment">Mais dans 3 mois peut-être</p>
+			</section>
+
+			<section><h2>Reflog</h2></section>
+			<section>
+				<p>L'outil de la dernière chance</p>
+				<pre class="fragment"><code>git reflog</code></pre>
+			</section>
+			<section>
+				<p>Il permet de visualiser l'historique des changement de référence</p>
+				<ul class="fragment">
+					<li>chaque commit</li>
+					<li>chaque checkout</li>
+					<li>chaque rebase</li>
+				</ul>
+			</section>
+			<section>
+				<p>Il ne permet pas de voir vos l'historique de vos modifications non commitées</p>
+				<ul class="fragment">
+					<li>ce qui est dans l'index</li>
+					<li>ce qui n'y est pas encore</li>
+					<li>pop/drop de stash</li>
+				</ul>
+			</section>
+		</section>
+
+		<section>
+			<h2>Outils</h2>
+			<section><h2>Git gui</h2></section>
+			<section>
+				<ul>
+					<li>indexer/desindexer des fichiers ou des lignes</li>
+					<li class="fragment">commiter ou ammend un commit</li>
+					<li class="fragment">gérer les branches</li>
+					<li class="fragment">gérer les dépots</li>
+					<li class="fragment">plein d'autres trucs dont je ne me sert pas ...</li>
+				</ul>
+			</section>
+			<section>
+				<img src="img/git-gui.png" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section><h2>Gitk</h2></section>
+			<section>
+				<ul>
+					<li>Visualiser l'abre git</li>
+					<li class="fragment">Il permet aussi quelques opérations sur les branches/repos</li>
+					<li class="fragment">Ainsi que de faire quelques recherches parmis les commits</li>
+				</ul>
+			</section>
+			<section>
+				<img src="img/gitk.png" style="border:0; background-color: inherit; box-shadow: none"/>
+			</section>
+			<section>
+				<p>Sinon en ligne de commande</p>
+				<pre><code>git log --oneline --color --all --decorate --graph</code></pre>
+			</section>
+		</section>
+
+		<section>
+			<section><h2>Questions ?</h2></section>
+			<section><p>Merci de votre attention</p></section>
+		</section>
+	</div>
+
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.js"></script>
+
+<script>
+
+	// Full list of configuration options available at:
+	// https://github.com/hakimel/reveal.js#configuration
+	Reveal.initialize({
+		controls: true,
+		progress: true,
+		history: true,
+		center: true,
+
+		transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+		// Optional reveal.js plugins
+		dependencies: [
+			{
+				src: 'lib/js/classList.js', condition: function () {
+				return !document.body.classList;
+			}
+			},
+			{
+				src: 'plugin/markdown/marked.js', condition: function () {
+				return !!document.querySelector('[data-markdown]');
+			}
+			},
+			{
+				src: 'plugin/markdown/markdown.js', condition: function () {
+				return !!document.querySelector('[data-markdown]');
+			}
+			},
+			{
+				src: 'plugin/highlight/highlight.js', async: true, condition: function () {
+				return !!document.querySelector('pre code');
+			}, callback: function () {
+				hljs.initHighlightingOnLoad();
+			}
+			},
+			{src: 'plugin/zoom-js/zoom.js', async: true},
+			{src: 'plugin/notes/notes.js', async: true}
+		]
+	});
+
+</script>
+
+</body>
+</html>
